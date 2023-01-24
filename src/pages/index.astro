@@ -2,7 +2,8 @@
 import "../styles/global.css";
 import Footer from "../components/Footer.astro";
 
-import Navigation from "../components/Navigation.astro";
+// import Navigation from "../components/Navigation.astro";
+import Header from "../components/Header.astro";
 ---
 
 <html lang="en">
@@ -14,9 +15,19 @@ import Navigation from "../components/Navigation.astro";
     <title>Astro Blog Rade</title>
   </head>
   <body>
-    <Navigation />
-
+    <!-- <Navigation /> -->
+    <Header />
     <h1>Hello Astro</h1>
     <Footer />
+
+    <script>
+      /* document.querySelector(".hamburger").addEventListener("click", () => {
+        const navlink = document.querySelector(".nav-links");
+        if (navlink) {
+          navlink.classList.toggle("expanded");
+        }
+      }); */
+      import "../scripts/menu";
+    </script>
   </body>
 </html>
