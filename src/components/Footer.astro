@@ -1,8 +1,17 @@
 ---
+import SocialMedia from "./SocialMedia.astro";
 const platform = "github";
 const username = "withastro";
 // const { platform, username } = Astro.props;
 ---
+
+<style>
+  footer {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+</style>
 
 <footer>
   <p>
@@ -10,4 +19,7 @@ const username = "withastro";
       href={`https://www.${platform}.com/${username}`}>{platform}</a
     >!
   </p>
+  <SocialMedia platform="twitter" username="astrodotbuild" />
+  <SocialMedia platform="github" username="withastro" />
+  <SocialMedia platform="youtube" username="astrodotbuild" />
 </footer>
