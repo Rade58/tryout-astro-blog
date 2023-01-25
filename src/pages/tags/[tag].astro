@@ -12,7 +12,10 @@ export async function getStaticPaths() {
   // we could have picj any name of the file we want, but since
   // we choose 'tag' we must pass property tag with the value
 
-  return [
+  // BUT THIS IS PRETTY BAD, WE DON'T WANT TO HARD CODE
+  // THESE
+
+  /* return [
     { params: { tag: "astro" }, props: { posts: allPosts } },
     { params: { tag: "success" }, props: { posts: allPosts } },
     { params: { tag: "community" }, props: { posts: allPosts } },
@@ -20,6 +23,21 @@ export async function getStaticPaths() {
     { params: { tag: "setbacks" }, props: { posts: allPosts } },
     { params: { tag: "learning in public" }, props: { posts: allPosts } },
   ];
+ */
+  // INSTEAD WE WILL ACCESS tags IN FRONMATTER OF EVERY POST
+  // WE WILL PUT THOSE IN SET SINCE SET DOESN'T ALLOW DUPLICATES
+
+  const bigTagArray = allPosts.map((post) => post.frontmatter.tags).flat();
+
+  const setOfTags = new Set(bigTagArray);
+
+  return [...setOfTags].map((tag) => {
+    const filteredPosts = allPosts.filter((post) => {
+      return post.frontmatter.tags.includes(tag);
+    });
+
+    return { params: { tag }, props: { posts: filteredPosts } };
+  });
 }
 
 // SO EVERY INDIVIDUAL PAGE WILL HAVE tag PARAM, SINCE WE PASSED
@@ -34,9 +52,9 @@ const { posts } = Astro.props;
 // we will filter them by tag
 // fronmatter has 'tags' field on it (check /posts/<>)
 
-const filteredPosts = posts.filter((post) =>
+/* const filteredPosts = posts.filter((post) =>
   post.frontmatter.tags.includes(tag)
-);
+); */
 ---
 
 <BaseLayout>
@@ -49,7 +67,7 @@ const filteredPosts = posts.filter((post) =>
       ))
     } -->
     {
-      filteredPosts.map((post) => (
+      posts.map((post) => (
         <PostItem title={post.frontmatter.title} url={post.url} />
       ))
     }
