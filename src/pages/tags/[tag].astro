@@ -1,0 +1,57 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PostItem from "../../components/PostItem.astro";
+
+export async function getStaticPaths() {
+  const allPosts = await Astro.glob("../posts/*md");
+
+  // EVERY ONE OF THESE WILL REPRESENT THE PAGE
+  // /tags/[tag]
+
+  // I guess you must pass tag because name of the file is [tag]
+  // we could have picj any name of the file we want, but since
+  // we choose 'tag' we must pass property tag with the value
+
+  return [
+    { params: { tag: "astro" }, props: { posts: allPosts } },
+    { params: { tag: "success" }, props: { posts: allPosts } },
+    { params: { tag: "community" }, props: { posts: allPosts } },
+    { params: { tag: "blogging" }, props: { posts: allPosts } },
+    { params: { tag: "setbacks" }, props: { posts: allPosts } },
+    { params: { tag: "learning in public" }, props: { posts: allPosts } },
+  ];
+}
+
+// SO EVERY INDIVIDUAL PAGE WILL HAVE tag PARAM, SINCE WE PASSED
+// THAT FROM getStaticPaths
+//
+//  posts IS PROP WE CHOOSE TO PASS TO EVERY PAGE
+
+const { tag } = Astro.params;
+const { posts } = Astro.props;
+
+// we will only show apropritate posts
+// we will filter them by tag
+// fronmatter has 'tags' field on it (check /posts/<>)
+
+const filteredPosts = posts.filter((post) =>
+  post.frontmatter.tags.includes(tag)
+);
+---
+
+<BaseLayout>
+  <ul>
+    <!-- {
+      filteredPosts.map((post) => (
+        <li>
+          <a href={post.url}>{post.fronmatter.title}</a>
+        </li>
+      ))
+    } -->
+    {
+      filteredPosts.map((post) => (
+        <PostItem title={post.frontmatter.title} url={post.url} />
+      ))
+    }
+  </ul>
+</BaseLayout>
